@@ -9,6 +9,7 @@ import androidx.room.Index
 @Entity(
     tableName = "favoritos",
     primaryKeys = ["usuarioId", "characterId"],
+
     foreignKeys = [
         ForeignKey(
             entity = Usuario::class,

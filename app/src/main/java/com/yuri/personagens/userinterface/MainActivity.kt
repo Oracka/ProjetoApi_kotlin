@@ -3,11 +3,11 @@ package com.yuri.personagens.userinterface
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
 import com.yuri.personagens.data.AppDatabase
 import com.yuri.personagens.data.Repository
 import com.yuri.personagens.data.SessionManager
 import com.yuri.personagens.network.RetrofitInstance
+import com.yuri.personagens.ui.theme.PersonagensTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,9 +20,9 @@ class MainActivity : ComponentActivity() {
             sessionManager = SessionManager(applicationContext)
         )
         setContent {
-            MaterialTheme {
-                AppNavigation(repository)
-            }
+            PersonagensTheme {
+            AppNavigation(repository)
+        } // tema principal do app
         }
     }
 }

@@ -15,4 +15,4 @@ interface RickAndMortyApi {
     @GET("character")
     suspend fun obterPersonagemPorNome(@Query("name") name: String): Response<PersonagemResponseDto>
 
-}
+} // muito util pra criar diversas rotas em apenas um textfield ou consulta.

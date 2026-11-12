@@ -11,5 +11,5 @@ object RetrofitInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(RickAndMortyApi::class.java)
-    }
+    } // retrofit ajudou bastante pra simplificar o processo
 }

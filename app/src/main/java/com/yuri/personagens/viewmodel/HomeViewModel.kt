@@ -12,31 +12,33 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class HomeUiState(
-    val isLoading: Boolean = false,
+    val carregando: Boolean = false,
     val personagem: PersonagemDto? = null,
     val erro: String? = null,
-    val favoritado: Boolean = false
+    val favoritado: Boolean = false,
+    val nomeUsuario: String = ""
 )
 
 class HomeViewModel(private val repository: Repository) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
+
     fun pesquisar(termo: String) {
         if (termo.isBlank()) return
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, erro = null, personagem = null) }
+            _uiState.update { it.copy(carregando = true, erro = null, personagem = null) }
             try {
                 val resultado = repository.buscarPersonagem(termo)
                 if (resultado != null) {
                     val jaFavoritado = repository.isFavorito(resultado.id)
-                    _uiState.update { it.copy(isLoading = false, personagem = resultado,
+                    _uiState.update { it.copy(carregando = false, personagem = resultado,
                         favoritado = jaFavoritado) }
                 } else {
-                    _uiState.update { it.copy(isLoading = false, erro = "Personagem não encontrado") }
+                    _uiState.update { it.copy(carregando = false, erro = "Personagem não encontrado") }
                 }
             } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, erro = "Erro na busca: ${e.message}") }
+                _uiState.update { it.copy(carregando = false, erro = "Erro na busca: ${e.message}") }
             }
         }
     }
@@ -45,11 +47,9 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             try {
                 if (_uiState.value.favoritado) {
-                    // Se já está favoritado, remove
                     repository.removerFavorito(personagem.id)
                     _uiState.update { it.copy(favoritado = false) }
                 } else {
-                    // Se não está, adiciona
                     repository.favoritar(personagem)
                     _uiState.update { it.copy(favoritado = true) }
                 }

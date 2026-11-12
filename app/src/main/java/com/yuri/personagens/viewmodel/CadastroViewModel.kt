@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class CadastroUiState(
-    val isLoading: Boolean = false,
+    val carregando: Boolean = false,
     val cadastroConcluido: Boolean = false,
     val erro: String? = null
 )
@@ -25,12 +25,12 @@ class CadastroViewModel(private val repository: Repository) : ViewModel() {
             return
         }
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, erro = null) }
+            _uiState.update { it.copy(carregando = true, erro = null) }
             try {
                 repository.cadastrar(nome, email, senha)
-                _uiState.update { it.copy(isLoading = false, cadastroConcluido = true) }
+                _uiState.update { it.copy(carregando = false, cadastroConcluido = true) }
             } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, erro = "Erro ao cadastrar: ${e.message}") }
+                _uiState.update { it.copy(carregando = false, erro = "Erro ao cadastrar: ${e.message}") }
             }
         }
     }

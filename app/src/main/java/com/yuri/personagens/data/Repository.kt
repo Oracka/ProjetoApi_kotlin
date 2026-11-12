@@ -26,7 +26,11 @@ class Repository(
     fun usuarioAtualId(): Long? = sessionManager.obterUsuarioId()
     fun sair() = sessionManager.encerrarSessao()
 
-    // CORRIGIDO: PersonagemDto para CharacterDto (ou mantenha PersonagemDto se você renomeou)
+    suspend fun buscarNomeUsuario(): String? {
+        val usuarioId = sessionManager.obterUsuarioId() ?: return  null
+        return  usuarioDao.buscarPorId(usuarioId)?.name
+    }
+
     suspend fun buscarPersonagem(termo: String): PersonagemDto? {
         if (termo.isBlank()) return null
 
@@ -55,7 +59,6 @@ class Repository(
         }
     }
 
-    // --- Favoritos ---
     suspend fun favoritar(personagem: PersonagemDto) {
         val usuarioId = sessionManager.obterUsuarioId() ?: return
         favoritoDao.inserir(

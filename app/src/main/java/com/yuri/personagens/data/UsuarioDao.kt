@@ -15,4 +15,5 @@ interface UsuarioDao {
 
     @Query("SELECT * FROM usuarios WHERE id = :id LIMIT 1")
     suspend fun buscarPorId(id: Long): Usuario?
+
 }
